@@ -14,4 +14,4 @@ FETCH FIRST 50 ROWS ONLY; --same as LIMIT. To make it compatable with other SQL 
 --print the shape of the data
 --SELECT COUNT(*) number_of_rows FROM public.iris_dataset
 --COUNT per category
---SELECT "variety", COUNT(*) number_of_rows FROM public.iris_dataset GROUP BY "variety"
+SELECT "variety", COUNT(*) number_of_rows FROM public.iris_dataset GROUP BY "variety"
