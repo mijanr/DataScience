@@ -42,37 +42,34 @@ class IrisModel:
         with open(self.hypar_params, 'w') as f:
             json.dump(study.best_params, f)
         self.best_params = study.best_params
-    class Model:
-        def __init__(self):
-            pass
 
-        def train(self, X: np.ndarray, y: np.ndarray) -> None:
-            """
-            Trains the logistic regression model.
+    def train(self, X: np.ndarray, y: np.ndarray) -> None:
+        """
+        Trains the logistic regression model.
 
-            Parameters:
-            -----------
-            X : array-like of shape (n_samples, n_features)
-                The input data.
-            y : array-like of shape (n_samples,)
-                The target values.
+        Parameters:
+        -----------
+        X : array-like of shape (n_samples, n_features)
+            The input data.
+        y : array-like of shape (n_samples,)
+            The target values.
 
-            Returns:
-            --------
-            None
-            """
-            # check if best params are available in self.hyparam_params path
-            self.hypar_params = base_path + "best_params/" + "best_hyper_params" + ".json"
-            try:
-                with open(self.hypar_params, 'r') as f:
-                    self.best_params = json.load(f)
-                print("Best params loaded")
-            except:
-                print("Best params not found. Hyperparameter tuning...")
-                self.hyperparameter_tuning(X, y)
-            self.model = LogisticRegression(**self.best_params)
-            self.model.fit(X, y)
-            print("Model trained")
+        Returns:
+        --------
+        None
+        """
+        # check if best params are available in self.hyparam_params path
+        self.hypar_params = base_path + "best_params/" + "best_hyper_params" + ".json"
+        try:
+            with open(self.hypar_params, 'r') as f:
+                self.best_params = json.load(f)
+            print("Best params loaded")
+        except:
+            print("Best params not found. Hyperparameter tuning...")
+            self.hyperparameter_tuning(X, y)
+        self.model = LogisticRegression(**self.best_params)
+        self.model.fit(X, y)
+        print("Model trained")
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Predicts the target values for the input data.
