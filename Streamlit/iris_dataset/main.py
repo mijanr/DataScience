@@ -2,7 +2,8 @@
 Train an ML model on Iris dataset
 """
 import joblib
-#logistic regression model
+
+# logistic regression model
 from sklearn.linear_model import LogisticRegression
 import optuna
 import json
@@ -12,7 +13,7 @@ from sklearn.model_selection import train_test_split
 import git
 import numpy as np
 
-base_path = git.Repo('.', search_parent_directories=True).working_tree_dir
+base_path = git.Repo(".", search_parent_directories=True).working_tree_dir
 base_path = base_path + "/Streamlit/iris_dataset/"
 
 
@@ -20,6 +21,7 @@ class IrisModel:
     """
     Train a Logistic Regression model on the Iris dataset
     """
+
     def __init__(self):
         self.model = None
 
@@ -27,19 +29,19 @@ class IrisModel:
         def objective(trial):
             # hyperparameters to tune for Logistic Regression
             params = {
-                'C': trial.suggest_loguniform('C', 0.01, 10),
-                'penalty': trial.suggest_categorical('penalty', ['l1', 'l2']),
-                'solver': trial.suggest_categorical('solver', ['liblinear', 'saga'])
+                "C": trial.suggest_loguniform("C", 0.01, 10),
+                "penalty": trial.suggest_categorical("penalty", ["l1", "l2"]),
+                "solver": trial.suggest_categorical("solver", ["liblinear", "saga"]),
             }
             model = LogisticRegression(**params)
             model.fit(X, y)
             return model.score(X, y)
 
-        study = optuna.create_study(direction='maximize')
+        study = optuna.create_study(direction="maximize")
         study.optimize(objective, n_trials=100)
         # export best params as json
         self.hypar_params = base_path + "best_params/" + "best_hyper_params" + ".json"
-        with open(self.hypar_params, 'w') as f:
+        with open(self.hypar_params, "w") as f:
             json.dump(study.best_params, f)
         self.best_params = study.best_params
 
@@ -61,7 +63,7 @@ class IrisModel:
         # check if best params are available in self.hyparam_params path
         self.hypar_params = base_path + "best_params/" + "best_hyper_params" + ".json"
         try:
-            with open(self.hypar_params, 'r') as f:
+            with open(self.hypar_params, "r") as f:
                 self.best_params = json.load(f)
             print("Best params loaded")
         except:
@@ -70,6 +72,7 @@ class IrisModel:
         self.model = LogisticRegression(**self.best_params)
         self.model.fit(X, y)
         print("Model trained")
+
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Predicts the target values for the input data.
@@ -132,7 +135,5 @@ if __name__ == "__main__":
     # evaluate model
     print("Test score:", model.model.score(X_test, y_test))
 
-    #save model
+    # save model
     model.save()
-
-
