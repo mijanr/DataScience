@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.datasets import load_iris
 
+
 def load_data():
     iris = load_iris()
     X = iris.data
@@ -26,11 +27,17 @@ def app():
     petal_length = float(st.number_input("Petal Length (cm)"))
     petal_width = float(st.number_input("Petal Width (cm)"))
 
-    target_names = ['Setosa', 'Versicolor', 'Virginica']
+    target_names = ["Setosa", "Versicolor", "Virginica"]
     if st.button("Predict"):
-        species = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])
-        probas = model.predict_proba([[sepal_length, sepal_width, petal_length, petal_width]])
-        st.write(f"Species predicted: {target_names[species[0]]} with {probas.max()*100:.2f}% confidence")
+        species = model.predict(
+            [[sepal_length, sepal_width, petal_length, petal_width]]
+        )
+        probas = model.predict_proba(
+            [[sepal_length, sepal_width, petal_length, petal_width]]
+        )
+        st.write(
+            f"Species predicted: {target_names[species[0]]} with {probas.max()*100:.2f}% confidence"
+        )
 
     # We will plot how the train data clusters in 2D space and then see how the test data fits in it.
     # First apply PCA to reduce the dimensionality of the data to 2D
@@ -44,14 +51,17 @@ def app():
     # add class labels as legend
     fig, ax = plt.subplots()
     for i in range(3):
-        ax.scatter(X_pca[y==i, 0], X_pca[y==i, 1], label=target_names[i])
+        ax.scatter(X_pca[y == i, 0], X_pca[y == i, 1], label=target_names[i])
     # Use "test_data" as label for the test data
-    ax.scatter(data_test[:, 0], data_test[:, 1], c='red', marker='x', s=100, label='test_data')
-    ax.set_xlabel('First Principal Component')
-    ax.set_ylabel('Second Principal Component')
-    ax.set_title('Train data')
+    ax.scatter(
+        data_test[:, 0], data_test[:, 1], c="red", marker="x", s=100, label="test_data"
+    )
+    ax.set_xlabel("First Principal Component")
+    ax.set_ylabel("Second Principal Component")
+    ax.set_title("Train data")
     ax.legend()
     st.pyplot(fig)
+
 
 if __name__ == "__main__":
     app()
